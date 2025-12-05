@@ -14,7 +14,7 @@ const int calibration_mode_indicator = 7;
 const int calibration_ready_indicator = 6;
 const int sensorPin = A0;
 
-const int cal_weights[] = {0, 50, 500, 1000, 1400};
+const int cal_weights[] = {0, 200, 400, 600, 800, 1000, 1400};
 
 const int sensor_val_display_line = 0;
 const bool calibration_mode_state = LOW;
@@ -36,9 +36,14 @@ void setup() {
   Serial.print(int(stats.range()));
 
   // Baked in regression
-  reg.addPoint(27, 0); // (sensor_reading, known weight (in grams))
-  reg.addPoint(60, 50);
-  reg.addPoint(600, 1000);
+  reg.addPoint(589, 0); // (sensor_reading, known weight (in grams))
+  reg.addPoint(592, 65);
+  reg.addPoint(600, 244);
+  reg.addPoint(615, 414.5);
+  reg.addPoint(631, 638.5);
+  reg.addPoint(640, 817.5);
+  reg.addPoint(653, 1002.6);
+  reg.addPoint(658, 1160.6);
 }
 
 void loop() {
@@ -80,11 +85,11 @@ void loop() {
     // Measurement 2
     delay(50);
     clearLine(1);
-    lcd.print("50g Weight");
+    lcd.print("200g Weight");
 
     stable_reading = getStableReading(sensorPin);
     reg.addPoint(stable_reading, cal_weights[1]);
-    Serial.println("50g measurement(saved to regression): " + String(stable_reading));
+    Serial.println("200g measurement(saved to regression): " + String(stable_reading));
     
     while(digitalRead(buttonPin)){
       delay(1);
@@ -96,11 +101,11 @@ void loop() {
     // Measurement 3
     delay(50);
     clearLine(1);
-    lcd.print("500g Weight");
+    lcd.print("400g Weight");
 
     stable_reading = getStableReading(sensorPin);
     reg.addPoint(stable_reading, cal_weights[2]);
-    Serial.println("500g measurement(saved to regression): " + String(stable_reading));
+    Serial.println("400g measurement(saved to regression): " + String(stable_reading));
     while(digitalRead(buttonPin)){
       delay(1);
     }
@@ -111,11 +116,11 @@ void loop() {
     // Measurement 4
     delay(50);
     clearLine(1);
-    lcd.print("1000g Weight");
+    lcd.print("600g Weight");
 
     stable_reading = getStableReading(sensorPin);
     reg.addPoint(stable_reading, cal_weights[3]);
-    Serial.println("1000g measurement(saved to regression): " + String(stable_reading));
+    Serial.println("600g measurement(saved to regression): " + String(stable_reading));
     while(digitalRead(buttonPin)){
       delay(1);
     }
@@ -126,10 +131,40 @@ void loop() {
     // Measurement 5
     delay(50);
     clearLine(1);
-    lcd.print("1400g Weight");
+    lcd.print("800g Weight");
 
     stable_reading = getStableReading(sensorPin);
     reg.addPoint(stable_reading, cal_weights[4]);
+    Serial.println("800g measurement(saved to regression): " + String(stable_reading));
+    while(digitalRead(buttonPin)){
+      delay(1);
+    }
+    while(digitalRead(buttonPin) == LOW){
+      displaySensorValue(readSensorValue(), reg.calculate(readSensorValue()));
+    }
+
+    // Measurement 6
+    delay(50);
+    clearLine(1);
+    lcd.print("1000g Weight");
+
+    stable_reading = getStableReading(sensorPin);
+    reg.addPoint(stable_reading, cal_weights[5]);
+    Serial.println("1000g measurement(saved to regression): " + String(stable_reading));
+    while(digitalRead(buttonPin)){
+      delay(1);
+    }
+    while(digitalRead(buttonPin) == LOW){
+      displaySensorValue(readSensorValue(), reg.calculate(readSensorValue()));
+    }
+
+    // Measurement 7
+    delay(50);
+    clearLine(1);
+    lcd.print("1400g Weight");
+
+    stable_reading = getStableReading(sensorPin);
+    reg.addPoint(stable_reading, cal_weights[6]);
     Serial.println("1400g measurement(saved to regression): " + String(stable_reading));
     while(digitalRead(buttonPin)){
       delay(1);
