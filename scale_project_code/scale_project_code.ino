@@ -32,8 +32,6 @@ void setup() {
   lcd.begin(16, 2);
 
   pinMode(LED_BUILTIN, OUTPUT);
-  Serial.print("The next number should be 5\n");
-  Serial.print(int(stats.range()));
 
   // Baked in regression
   reg.addPoint(589, 0); // (sensor_reading, known weight (in grams))
@@ -57,7 +55,6 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print("Measure Mode");
 
-  //Serial.println("Predicted weight: " + String(reg.calculate(sensor_reading)));
 
   if (digitalRead(buttonPin) == HIGH) {
 
@@ -169,7 +166,6 @@ void loop() {
     clearLine(1);
     lcd.print("CAL COMPLETE");
     delay(200);
-    //debugBlink();
     
     clearLine(1);
     togglePin(calibration_mode_indicator);
@@ -177,11 +173,7 @@ void loop() {
 
 }
 
-// void calibrationMode() {
-//   while(True) {
 
-//   }
-// }
 void togglePin(int pin_num) {
   digitalWrite(pin_num, !digitalRead(pin_num));
 }
@@ -194,16 +186,6 @@ void clearLine(int line) {
   lcd.setCursor(0, line);
   lcd.print("                ");
   lcd.setCursor(0, line);
-}
-
-void debugBlink(){
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(100);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(100);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(100);
-  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void displaySensorValue(int sensor_reading, double predicted_weight) {
